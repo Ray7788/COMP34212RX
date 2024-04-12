@@ -42,6 +42,35 @@ def rotate(robot, angle):
     # Rotate the robot
     robot.moveTo(0, 0, angle)
 
+import math
+
+# Grid cell length
+l = 0.5
+
+def calculate_direction(start, end):
+    """
+    Calculate the direction (in degrees) from start to end.
+    """
+    dx = end[0] - start[0]
+    dy = end[1] - start[1]
+    return math.degrees(math.atan2(dy, dx))
+
+def move_to_target(start, end):
+    """
+    Move the robot from the start position to the end position.
+    """
+    # Calculate direction to the target
+    direction = calculate_direction(start, end)
+    
+    # Rotate the robot to face the target direction
+    rotate(robot, direction)
+    
+    # Calculate the distance to the target
+    distance = math.sqrt((end[0] - start[0])**2 + (end[1] - start[1])**2) * l
+    
+    # Move the robot forward to the target
+    walk_forward(robot, distance)
+
 if __name__ == "__main__":
     # Set the IP address and port of the Pepper robot
     robot_ip = "<robot_ip>"
@@ -63,6 +92,15 @@ if __name__ == "__main__":
 
     # Example usage: Rotate 180 degrees
     rotate(robot, 180)
+
+# -------------------
+    # Set the coordinates of the starting and ending positions
+    start = (1, 1)  # Example starting position
+    end = (3, 3)    # Example ending position
+
+    # Move the robot from the starting position to the ending position
+    move_to_target(start, end)
+# ---
 
     # Disconnect from the Pepper robot
     robot.__del__()
